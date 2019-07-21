@@ -1,4 +1,4 @@
-R code for scoring some commonly used psychology measures
+# R code for scoring some commonly used psychology measures #
 
 For most scales the default is `alpha=F` to return item scores. Pass `alpha=T` if you only want alpha values.
 
@@ -34,7 +34,7 @@ The term `df` is used to denote the input dataframe
 * [Short Dark Triad 3](http://www.midss.org/sites/default/files/d3.pdf)
   * sd3_score<-function(x)
 
-## View data functions ##
+## Functions to view data in APA format or calculate P and F from models ##
 
 * Output correlation in APA style
   * apaCorr2<-function(df,round_digits=2)
