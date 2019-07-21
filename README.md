@@ -1,4 +1,4 @@
-# R code for scoring some commonly used psychology measures #
+# R code for scoring psychological testing measures #
 
 For most scales the default is `alpha=F` to return item scores. Pass `alpha=T` if you only want alpha values.
 
