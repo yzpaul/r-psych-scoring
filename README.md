@@ -2,13 +2,15 @@
 
 For most scales the default is `alpha=F` to return item scores. Pass `alpha=T` if you only want alpha values.
 
-The term `df` is used to denote the input dataframe
+The term `df` is used to denote the input dataframe eg. for the rse the input value `df` could be represented by: `data.frame(matrix(sample.int(15,100, TRUE), ncol=10))` although this example is unlikely to produce valid values for scoring
+
+The number of columns is assumed. For example: in the IPIP 50, it is assumed you matrix will have 50 columns where each column is a response to a question.
+
 
 ## Scales ##
 
 * [Rosenberg Self-Esteem Scale](https://www.wwnorton.com/college/psych/psychsci/media/rosenberg.htm)
-  * rsescore<-function(x,alpha=F) 
-    * expects dataframe where each column is an RSE item
+  * rsescore<-function(df,alpha=F) 
 
 * IPIP 50 
   * ipip50score<-function(df,alpha=F)
@@ -20,7 +22,7 @@ The term `df` is used to denote the input dataframe
   * npi16score<-function(npi,alpha=F)
 
 * [Big Five Inventory (BFI-44)](https://fetzer.org/sites/default/files/images/stories/pdf/selfmeasures/Personality-BigFiveInventory.pdf)
-  * bfi44score<-function(x,alpha=F)
+  * bfi44score<-function(df,alpha=F)
 
 * [Five Factor Model Rating form](http://www.uky.edu/~widiger/ffmrf.doc)
   * ffmrfscore<-function(csv,alpha=F)
