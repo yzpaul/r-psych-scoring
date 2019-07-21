@@ -4,7 +4,7 @@ For most scales the default is `alpha=F` to return item scores. Pass `alpha=T` i
 
 The term `df` is used to denote the input dataframe eg. for the rse the input value `df` could be represented by: `data.frame(matrix(sample.int(15,100, TRUE), ncol=10))` although this example is unlikely to produce valid values for scoring
 
-The number of columns is assumed. For example: in the IPIP 50, it is assumed you matrix will have 50 columns where each column is a response to a question.
+The number of columns is assumed to be the number of questions in the dataset. For example: in the IPIP 50, which has 50 questions, it is expected that your dataframe will have 50 columns where each column is a response to a question. Eg. column 1 is the response to the first question etc.
 
 
 ## Scales ##
