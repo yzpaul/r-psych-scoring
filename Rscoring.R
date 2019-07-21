@@ -144,6 +144,43 @@ tipiscore<-function(x){
   return(ret)
 }
 
+#http://www.persoc.net/persoc/uploads/Toolbox/NARQ_English.pdf
+narq<-function(x,alpha=F){
+  require(assertthat)
+  assert_that(dim(x)[2] == 18)
+  #assert_that(all(is.numeric(x),na.rm=T))
+  assert_that(all(x<=6,na.rm=T))
+  #return(narq)
+  my.keys <- make.keys(nvars=18,list(
+    narc_score=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),
+    admiration=c(1,2,3,5,7,8,15,16,18),
+    rivalry=c(4,6,9,10,11,12,13,14,17)
+  ))
+  my.scales <- scoreItems(my.keys,x)
+  #my.scales #alpha, correlation b/n attributes
+  #t(my.scales$alpha)
+  my.scores <- my.scales$scores
+  ifelse(alpha==F,return(my.scores),return(as.data.frame(t(my.scales$alpha))))
+}
+
+sd3_score<-function(x){
+  require(assertthat)
+  require(psych)
+  assert_that(dim(x)[2] == 27)
+  assert_that(all(x<=5,na.rm=T))
+  assert_that(all(x>=1,na.rm=T))
+
+  sd3<-NULL
+  sd3$triadmachiavelli<-rowSums(reverse.code(c(1,1,1,1,1,1,1,1,1),x[,1:9],mini=1,maxi=5),na.rm=FALSE)
+  sd3$triadnarc<-rowSums(reverse.code(c(1,-1,1,1,1,-1,1,-1,1),x[,10:18],mini=1,maxi=5),na.rm=FALSE)
+  sd3$triadpsychopathy<-rowSums(reverse.code(c(1,-1,1,1,1,1,-1,1,1),x[,19:27],mini=1,maxi=5),na.rm=FALSE)
+  return(sd3)
+}
+
+###############################################################################
+#Functions to View data
+##############################################################################
+
 #example: apaCorr2(data.frame(sample.int(20,10,replace=T),sample.int(20,10,replace=T)))
 apaCorr2<-function(df,round_digits=2){
   require("psych")
@@ -158,6 +195,15 @@ apaCorr2<-function(df,round_digits=2){
   colnames(temp)<-"mean(SD)"
   df<-data.frame(temp,pc)
   return(df)
+}
+
+#get p-value from linear model
+lmp <- function (modelobject) {
+  if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
+  f <- summary(modelobject)$fstatistic
+  p <- pf(f[1],f[2],f[3],lower.tail=F)
+  attributes(p) <- NULL
+  return(p)
 }
 
 #takes in linear model outputs: F(dfb,dfw)=fobt,p-val
@@ -222,39 +268,6 @@ partial_corr<-function(a,b){
 }
 
 
-#http://www.persoc.net/persoc/uploads/Toolbox/NARQ_English.pdf
-narq<-function(x,alpha=F){
-  require(assertthat)
-  assert_that(dim(x)[2] == 18)
-  #assert_that(all(is.numeric(x),na.rm=T))
-  assert_that(all(x<=6,na.rm=T))
-  #return(narq)
-  my.keys <- make.keys(nvars=18,list(
-    narc_score=c(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18),
-    admiration=c(1,2,3,5,7,8,15,16,18),
-    rivalry=c(4,6,9,10,11,12,13,14,17)
-  ))
-  my.scales <- scoreItems(my.keys,x)
-  #my.scales #alpha, correlation b/n attributes
-  #t(my.scales$alpha)
-  my.scores <- my.scales$scores
-  ifelse(alpha==F,return(my.scores),return(as.data.frame(t(my.scales$alpha))))
-}
-
-sd3_score<-function(x){
-  require(assertthat)
-  require(psych)
-  assert_that(dim(x)[2] == 27)
-  assert_that(all(x<=5,na.rm=T))
-  assert_that(all(x>=1,na.rm=T))
-
-  sd3<-NULL
-  sd3$triadmachiavelli<-rowSums(reverse.code(c(1,1,1,1,1,1,1,1,1),x[,1:9],mini=1,maxi=5),na.rm=FALSE)
-  sd3$triadnarc<-rowSums(reverse.code(c(1,-1,1,1,1,-1,1,-1,1),x[,10:18],mini=1,maxi=5),na.rm=FALSE)
-  sd3$triadpsychopathy<-rowSums(reverse.code(c(1,-1,1,1,1,1,-1,1,1),x[,19:27],mini=1,maxi=5),na.rm=FALSE)
-  return(sd3)
-}
-
 #calculate icc1 from NLME model
 my.nlme.icc1<-function(x){
   vals<-as.numeric(VarCorr(x)[,1])
@@ -275,13 +288,4 @@ view.nlme.model<-function(x){
   res<-rbind(res)
   colnames(res)<-c("Fixed Intercept","Within-person Random","Between-person Random","Log Likelihood","AIC","BIC")
   t(res)
-}
-
-#get p-value from linear model
-lmp <- function (modelobject) {
-  if (class(modelobject) != "lm") stop("Not an object of class 'lm' ")
-  f <- summary(modelobject)$fstatistic
-  p <- pf(f[1],f[2],f[3],lower.tail=F)
-  attributes(p) <- NULL
-  return(p)
 }
